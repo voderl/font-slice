@@ -1,0 +1,16 @@
+{
+  "name": "font-slice",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:voderl/font-slice.git",
+  "author": "voderl <voderl@qq.com>",
+  "license": "MIT",
+  "dependencies": {
+    "buffer-to-vinyl": "^1.1.0",
+    "fonteditor-core": "^2.1.11",
+    "fontmin": "^0.9.9"
+  },
+  "devDependencies": {
+    "cssom": "^0.5.0"
+  }
+}
