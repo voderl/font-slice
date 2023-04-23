@@ -9,6 +9,7 @@ const utils = require('./utils');
 async function createFontSlice({ fontPath, outputDir, fontFamily }) {
   const fontBuffer = fs.readFileSync(fontPath);
   const font = Font.create(fontBuffer);
+
   // 获取输入字体包含的所有 unicode
   const charMap = font.data.cmap;
 
@@ -23,7 +24,6 @@ async function createFontSlice({ fontPath, outputDir, fontFamily }) {
 
   const cssList = await Promise.all(
     filteredRanges.map((range, index) => {
-      console.log('subset', subset);
       return createFontSubset({
         fontBuffer,
         outputDir,
@@ -70,6 +70,7 @@ async function createFontSubset({ fontBuffer, outputDir, name, fontFamily, subse
   fontmin.use(Fontmin.ttf2woff2());
   fontmin.dest(outputDir);
 
+  console.log(`正在生成字体文件 ${name}`);
   await new Promise((resolve, reject) => {
     fontmin.run(function (err, files) {
       if (err) {
@@ -92,7 +93,25 @@ async function createFontSubset({ fontBuffer, outputDir, name, fontFamily, subse
 `;
 }
 
+module.exports = createFontSlice;
+
 createFontSlice({
   fontPath: path.resolve(__dirname, '../assets/HYWenHei-55W.ttf'),
   outputDir: path.resolve(__dirname, '../output'),
+  // woff、woff2、svg、eot
+  format: [],
+  // name
+  fontFamily,
+  // normal
+  fontWeight,
+  // normal
+  fontStyle,
+  // swap
+  fontDisplay,
+  customUnicodeRange: [
+    {
+      unicodes: [],
+    },
+  ],
+  hinting,
 });

@@ -5,7 +5,8 @@ slice chinese fonts into small slices
 
 ## 原理
 谷歌字体可以按照按照使用频率来分成不同字体包来减小加载体积。
-以谷歌字体的一个 css 引入文件为例
+
+以谷歌字体的一个 css 引入文件为例:
 ```css
 @font-face {
   font-family: 'Noto Sans SC';
