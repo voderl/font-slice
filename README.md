@@ -3,9 +3,72 @@ slice chinese fonts into small slices
 
 本工具使用 Google fonts 的 unicode-range 划分，来将一个完整的字体包分成多个小的资源包，在大部分情况下，只需要加载部分资源包就能完全覆盖。同时，当网页中有生僻字时，需要付出的代价也只是多加载几个资源包。
 
+## usage
+```js
+const createFontSlice = require('font-slice');
+
+createFontSlice({
+  // fontPath
+  fontPath: path.resolve(__dirname, 'YourPath.ttf'),
+  // outputDir
+  outputDir: path.resolve(__dirname, './output'),
+})
+
+```
+## install
+```sh
+npm install --save-dev font-slice
+yarn add -D font-slice
+```
+
+## options
+```ts
+declare type TOptions = {
+  /**
+   * 需要处理的源字体，暂只支持 ttf
+   */
+  fontPath: string;
+  /**
+   * 保存到的目录
+   */
+  outputDir: string;
+  /**
+   * 需要转换到的格式，默认为 ["woff2"]
+   */
+  formats?: Array<'woff' | 'woff2' | 'ttf' | 'eot' | 'svg'>;
+  /**
+   * 字体的 font-family 值
+   */
+  fontFamily?: string;
+  /**
+   * 字体的 font-weight，默认为 normal
+   */
+  fontWeight?: string;
+  /**
+   * 字体的 fontStyle，默认为 normal
+   */
+  fontStyle?: string;
+  /**
+   * 字体的 font-display，默认为 swap
+   */
+  fontDisplay?: string;
+  /**
+   * 自定义字体的分割格式，默认为 google fonts 的 unicode-range
+   */
+  customUnicodeRange?: Array<{
+    unicodes: number[];
+  }>;
+  /**
+   * keep ttf hint info (fpgm, prep, cvt). default = true
+   */
+  hinting?: boolean;
+};
+```
 ## 原理
+
 谷歌字体可以按照按照使用频率来分成不同字体包来减小加载体积。
-以谷歌字体的一个 css 引入文件为例
+
+以谷歌字体的一个 css 引入文件为例:
 ```css
 @font-face {
   font-family: 'Noto Sans SC';

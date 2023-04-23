@@ -3,8 +3,14 @@ const path = require('path');
 const cssom = require('cssom');
 const utils = require('../src/utils');
 
-const inputPath = path.resolve(__dirname, '../assets/google-font-unicode-range.css');
-const outputPath = path.resolve(__dirname, '../assets/google-font-unicode-range.json');
+const inputPath = path.resolve(
+  __dirname,
+  '../assets/google-font-unicode-range.css',
+);
+const outputPath = path.resolve(
+  __dirname,
+  '../assets/google-font-unicode-range.json',
+);
 
 const data = fs.readFileSync(inputPath, 'utf-8');
 
