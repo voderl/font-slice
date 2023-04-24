@@ -1,10 +1,19 @@
 # font-slice
-slice chinese fonts into small slices
 
-本工具使用 Google fonts 的 unicode-range 划分，来将一个完整的字体包分成多个小的资源包，在大部分情况下，只需要加载部分资源包就能完全覆盖。同时，当网页中有生僻字时，需要付出的代价也只是多加载几个资源包。
+slice chinese fonts into small slices.
 
+[Demo](https://voderl.cn/js/%E5%AF%B9%E4%B8%AD%E6%96%87%E5%AD%97%E4%BD%93%E8%BF%9B%E8%A1%8C%E5%88%87%E7%89%87/)
+
+将中文字体按照 Google Fonts 的切割子集方案，生成多个较小体积的资源包。仅需加载 10% 资源即可以对应的字体展示完整页面。
 ## usage
+1. install font-slice
+```sh
+npm install --save-dev font-slice
+yarn add -D font-slice
+```
+2. usage
 ```js
+const path = require("path");
 const createFontSlice = require('font-slice');
 
 createFontSlice({
@@ -13,12 +22,6 @@ createFontSlice({
   // outputDir
   outputDir: path.resolve(__dirname, './output'),
 })
-
-```
-## install
-```sh
-npm install --save-dev font-slice
-yarn add -D font-slice
 ```
 
 ## options
@@ -64,9 +67,11 @@ declare type TOptions = {
   hinting?: boolean;
 };
 ```
-## 原理
+## detail
 
-谷歌字体可以按照按照使用频率来分成不同字体包来减小加载体积。
+博客：[中文字体的终极解决方案——对字体进行切片](https://voderl.cn/js/%E5%AF%B9%E4%B8%AD%E6%96%87%E5%AD%97%E4%BD%93%E8%BF%9B%E8%A1%8C%E5%88%87%E7%89%87/)
+
+本工具使用 Google fonts 的 unicode-range 划分，来将一个完整的字体包分成多个小的资源包，在大部分情况下，只需要加载部分资源包就能完全覆盖。同时，当网页中有生僻字时，需要付出的代价也只是多加载几个资源包。
 
 以谷歌字体的一个 css 引入文件为例:
 ```css
@@ -89,5 +94,16 @@ declare type TOptions = {
 }
 ```
 
-按照一定的粒度，将字体分成多个文件，比如一个4MB的字体包分成100个40KB的字体包。通过机器学习等方法，将一些字频较高的字体分别打包进同一个字体包，并通过css中 unicode-range 来给不同文字加载不同的字体包资源。这样的话，一般网页中使用到的中文也只是一部分字体，只需要加载多个资源包就能完全覆盖。同时，就算网页中有很多生僻字，需要付出的代价也只是多加载几个资源包。
+该项目所做的内容如下：
 
+1. 提取 google fonts 的 unicode-range。
+
+2. 提取要处理的字体包含的所有字符，得到 google fonts 的 unicode-range 和字体里包含的字符的交集部分。
+
+3. 将字符按照上面步骤得出的拆分方案，提取字体子集，生成多个文件及 css 样式文件。
+
+### Thanks
+
+* [Google Fonts](https://fonts.google.com/) - https://fonts.google.com/
+* [fontmin](https://github.com/ecomfe/fontmin) - https://github.com/ecomfe/fontmin
+* [fonteditor-core](https://github.com/kekee000/fonteditor-core) - https://github.com/kekee000/fonteditor-core
