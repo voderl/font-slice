@@ -1,6 +1,6 @@
 declare type TOptions = {
   /**
-   * 需要处理的源字体，暂只支持 ttf
+   * 需要处理的源字体，暂只支持 ttf、otf (otf 也是先转成 ttf 再处理)
    */
   fontPath: string;
   /**
@@ -34,7 +34,9 @@ declare type TOptions = {
     unicodes: number[];
   }>;
   /**
-   * keep ttf hint info (fpgm, prep, cvt). default = true
+   * 如果开启可能会让生成的字体体积变大，默认不开启
+   * keep ttf hint info (fpgm, prep, cvt). default = false
+   * https://github.com/ecomfe/fontmin#glyph
    */
   hinting?: boolean;
 };

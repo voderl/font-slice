@@ -3,7 +3,7 @@ const path = require('path');
 const { Font } = require('fonteditor-core');
 const Fontmin = require('fontmin');
 const bufferToVinyl = require('buffer-to-vinyl');
-const unicodeRanges = require('.//google-font-unicode-range.json');
+const unicodeRanges = require('./google-font-unicode-range.json');
 const utils = require('./utils');
 const { generateCss, generateHtml } = require('./template');
 const createFolderServer = require('./server');
@@ -20,10 +20,18 @@ async function createFontSlice({
   // swap
   fontDisplay = 'swap',
   customUnicodeRange = unicodeRanges,
-  hinting = true,
+  hinting = false,
 }) {
   const fontBuffer = fs.readFileSync(fontPath);
-  const font = Font.create(fontBuffer);
+
+  const isOtf = path.extname(fontPath) === '.otf';
+
+  if (!['.otf', '.ttf'].includes(path.extname(fontPath)))
+    throw new Error(`暂时只支持 ttf、otf 格式`);
+
+  const font = Font.create(fontBuffer, {
+    type: isOtf ? 'otf' : 'ttf',
+  });
 
   // 获取输入字体包含的所有 unicode
   const charMap = font.data.cmap;
@@ -47,6 +55,10 @@ async function createFontSlice({
       fontmin.getFiles = () => {
         return bufferToVinyl.stream(fontBuffer, fileName);
       };
+
+      if (isOtf) {
+        fontmin.use(Fontmin.otf2ttf());
+      }
 
       fontmin.use(
         Fontmin.glyph({
@@ -75,7 +87,6 @@ async function createFontSlice({
         }
       });
 
-      fontmin.use(Fontmin.ttf2woff2());
       fontmin.dest(outputDir);
 
       console.log(`正在生成字体文件 ${fileName}`);

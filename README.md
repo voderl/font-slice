@@ -4,7 +4,8 @@ slice chinese fonts into small slices.
 
 [Demo](https://voderl.cn/js/%E5%AF%B9%E4%B8%AD%E6%96%87%E5%AD%97%E4%BD%93%E8%BF%9B%E8%A1%8C%E5%88%87%E7%89%87/)
 
-将中文字体按照 Google Fonts 的切割子集方案，生成多个较小体积的资源包。仅需加载 10% 资源即可以对应的字体展示完整页面。
+将中文字体按照 Google Fonts 的切割子集方案，生成多个较小体积的资源包。仅需加载小部分字体资源即可展示完整页面。
+
 ## usage
 1. install font-slice
 ```sh
@@ -23,12 +24,12 @@ createFontSlice({
   outputDir: path.resolve(__dirname, './output'),
 })
 ```
-
+3. 引用生成的 font.css 文件即可使用
 ## options
 ```ts
 declare type TOptions = {
   /**
-   * 需要处理的源字体，暂只支持 ttf
+   * 需要处理的源字体，暂只支持 ttf、otf (otf 也是先转成 ttf 再处理)
    */
   fontPath: string;
   /**
@@ -62,11 +63,26 @@ declare type TOptions = {
     unicodes: number[];
   }>;
   /**
-   * keep ttf hint info (fpgm, prep, cvt). default = true
+   * 如果开启可能会让生成的字体体积变大，默认不开启
+   * keep ttf hint info (fpgm, prep, cvt). default = false
+   * https://github.com/ecomfe/fontmin#glyph
    */
   hinting?: boolean;
 };
 ```
+
+## performance
+
+以[得意黑](https://github.com/atelier-anchor/smiley-sans)字体为例为例
+
+处理前 ttf 大小 2074KB，woff2 大小 928KB.
+
+处理后每个类型的字体生成 95 个文件：  
+ttf   总大小为 2.3M   (最小文件 3.4K，最大文件 55K)  
+woff2 总大小为 1.3M   (最小文件 1.5K，最大文件 33K)
+
+实际加载页面的体积由页面使用的字符决定，以该 README 为例，只需要加载 330KB 就能覆盖全部字符。
+
 ## detail
 
 博客：[中文字体的终极解决方案——对字体进行切片](https://voderl.cn/js/%E5%AF%B9%E4%B8%AD%E6%96%87%E5%AD%97%E4%BD%93%E8%BF%9B%E8%A1%8C%E5%88%87%E7%89%87/)

@@ -11,8 +11,8 @@ function generateHtml(fontFamily) {
     </head>
     <body>
       <div style="width: 600px; margin: auto;">
-        <p> Created by voderl (<a href="https://github.com/voderl/font-slice" target="_blank">https://github.com/voderl/font-slice</a>)</p>
-        <p> 如果遇到问题可以在 issue 中反馈 </p>
+        <p> Created by voderl ( <a href="https://github.com/voderl/font-slice" target="_blank">https://github.com/voderl/font-slice</a> )</p>
+        <p> 如果遇到问题可以在 <a href="https://github.com/voderl/font-slice/issues" target="_blank">issue</a> 中反馈 </p>
         <textarea rows="10" cols="50" style="font-size: 20px; font-family: ${fontFamily};">在这里进行字体测试吧~
 
 会有清亮的风使草木伏地...</textarea>
