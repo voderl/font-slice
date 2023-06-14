@@ -25,6 +25,7 @@ createFontSlice({
 })
 ```
 3. 引用生成的 font.css 文件即可使用
+
 ## options
 ```ts
 declare type TOptions = {
@@ -36,6 +37,14 @@ declare type TOptions = {
    * 保存到的目录
    */
   outputDir: string;
+  /**
+   * 是否需要在生成完成后打开预览页面，默认为 true，如果为 false 不会生成 index.html 及启动服务器
+   */
+  preview?: boolean;
+  /**
+   * 生成字体文件的名称，默认为 `${fontFileName}.${index + 1}`
+   */
+  generateFontSubsetName?: (fontFileName: string, index: number) => string;
   /**
    * 需要转换到的格式，默认为 ["woff2"]
    */
@@ -70,6 +79,12 @@ declare type TOptions = {
   hinting?: boolean;
 };
 ```
+
+## 注意项
+
+1. 默认的 font-display 为 swap，即在字体没有加载完成时，先使用别的字体展示。需要调整的话可以在传入的 options 里指明，[更多 font-display 介绍请看这里](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@font-face/font-display)
+
+2. 建议在 cdn 中将对应的字体目录直接设置一定时长的浏览器缓存，避免因字体加载导致页面内容闪动。
 
 ## performance
 

@@ -8,6 +8,14 @@ declare type TOptions = {
    */
   outputDir: string;
   /**
+   * 是否需要在生成完成后打开预览页面，默认为 true，如果为 false 不会生成 index.html 及启动服务器
+   */
+  preview?: boolean;
+  /**
+   * 生成字体文件的名称，默认为 `${fontFileName}.${index + 1}`
+   */
+  generateFontSubsetName?: (fontFileName: string, index: number) => string;
+  /**
    * 需要转换到的格式，默认为 ["woff2"]
    */
   formats?: Array<'woff' | 'woff2' | 'ttf' | 'eot' | 'svg'>;

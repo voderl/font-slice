@@ -8,6 +8,9 @@ const utils = require('./utils');
 const { generateCss, generateHtml } = require('./template');
 const createFolderServer = require('./server');
 
+const defaultGenerateFontSubsetName = (fontFileName, index) =>
+  `${fontFileName}.${index + 1}`;
+
 async function createFontSlice({
   fontPath,
   outputDir,
@@ -21,6 +24,8 @@ async function createFontSlice({
   fontDisplay = 'swap',
   customUnicodeRange = unicodeRanges,
   hinting = false,
+  preview = true,
+  generateFontSubsetName = defaultGenerateFontSubsetName,
 }) {
   const fontBuffer = fs.readFileSync(fontPath);
 
@@ -47,9 +52,16 @@ async function createFontSlice({
 
   const outputFontFamily = utils.formatFontFamily(fontFamily || name);
 
+  const fontSubsetMap = Object.create(null);
+
   const cssList = await Promise.all(
     filteredRanges.map(async (range, index) => {
-      const fileName = `${name}.${index + 1}`;
+      const fileName = generateFontSubsetName(name, index);
+
+      if (fileName in fontSubsetMap)
+        throw new Error(`duplicate font subset name "${fileName}"`);
+
+      fontSubsetMap[fileName] = true;
 
       const fontmin = new Fontmin();
       fontmin.getFiles = () => {
@@ -126,12 +138,17 @@ async function createFontSlice({
 ${cssList.join('\n')}
 `,
   );
-  fs.writeFileSync(
-    path.resolve(outputDir, 'index.html'),
-    generateHtml(outputFontFamily),
-  );
 
-  createFolderServer(outputDir);
+  if (preview) {
+    fs.writeFileSync(
+      path.resolve(outputDir, 'index.html'),
+      generateHtml(outputFontFamily),
+    );
+
+    createFolderServer(outputDir);
+  } else {
+    console.log(`字体 ${outputFontFamily} 文件已全部生成成功`);
+  }
 }
 
 module.exports = createFontSlice;
